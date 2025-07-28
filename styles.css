@@ -435,8 +435,10 @@ footer {
     
     /* Music section */
     #favorite-music iframe {
-        height: 350px;
+        height: 300px;
         max-width: 100%;
+        margin: 0 auto;
+        display: block;
     }
     
     /* Books section */
