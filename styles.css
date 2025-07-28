@@ -195,9 +195,12 @@ h2 {
 
 footer {
     text-align: center;
-    padding: 20px 40px;
-    font-size: 0.8em;
-    color: #666;
+    padding: 9px 40px;
+    font-size: 0.9em;
+    color: #333;
+    font-weight: 600;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 40px;
 }
 
 /* Coming Soon Pages Styles */
@@ -463,7 +466,8 @@ footer {
     
     /* Footer */
     footer {
-        padding: 15px 20px;
-        font-size: 0.7em;
+        padding: 6px 15px;
+        font-size: 0.8em;
+        margin-top: 30px;
     }
 }
