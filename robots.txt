@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ashwinkuruvidi.com/sitemap.xml
+Sitemap: https://ashchak.github.io/ashwinkuruvidi.com/sitemap.xml
