@@ -314,8 +314,9 @@ footer {
     }
     
     nav a.active {
-        background-color: #000;
-        color: #fff;
+        background-color: #000 !important;
+        color: #fff !important;
+        border-radius: 6px;
     }
     
     main {
