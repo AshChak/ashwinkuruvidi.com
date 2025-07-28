@@ -104,6 +104,18 @@ nav a {
     margin-left: 20px;
     color: #000;
     text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+nav a:hover {
+    background-color: #f5f5f5;
+}
+
+nav a.active {
+    background-color: #000;
+    color: #fff;
 }
 
 nav a:first-child {
@@ -188,6 +200,92 @@ footer {
     color: #666;
 }
 
+/* Coming Soon Pages Styles */
+#projects-hero, #blogs-hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+#projects-hero p, #blogs-hero p {
+    font-size: 1.1em;
+    color: #666;
+    margin-top: 10px;
+}
+
+.coming-soon-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 60px 20px;
+    background: #fafafa;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.coming-soon-icon {
+    margin-bottom: 30px;
+}
+
+.coming-soon-container h3 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.coming-soon-container p {
+    font-size: 1.1em;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+    text-align: left;
+    display: inline-block;
+}
+
+.features-list li {
+    padding: 8px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.features-list i {
+    color: #4CAF50;
+    margin-right: 10px;
+}
+
+.eta {
+    font-size: 1.2em;
+    color: #333;
+    font-weight: 600;
+    margin: 30px 0;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin-top: 20px;
+}
+
+.back-btn:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+}
+
+.back-btn i {
+    margin-right: 8px;
+}
+
 /* Responsiveness */
 @media (max-width: 768px) {
     body {
@@ -210,8 +308,14 @@ footer {
     }
     
     nav a {
-        margin: 0 10px;
+        margin: 0 8px;
         font-size: 0.9em;
+        padding: 6px 10px;
+    }
+    
+    nav a.active {
+        background-color: #000;
+        color: #fff;
     }
     
     main {
@@ -221,6 +325,38 @@ footer {
     h2 {
         font-size: 1.1em;
         margin-bottom: 15px;
+    }
+    
+    /* Coming soon pages mobile */
+    .coming-soon-container {
+        margin: 20px 10px;
+        padding: 40px 15px;
+        border-radius: 15px;
+    }
+    
+    .coming-soon-container h3 {
+        font-size: 1.5em;
+    }
+    
+    .coming-soon-container p {
+        font-size: 1em;
+    }
+    
+    .coming-soon-icon i {
+        font-size: 60px !important;
+    }
+    
+    .features-list {
+        text-align: center;
+    }
+    
+    .features-list li {
+        font-size: 0.9em;
+    }
+    
+    .back-btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
     }
     
     /* Social icons */
