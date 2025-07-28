@@ -15,6 +15,7 @@
     padding: 24px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     transition: box-shadow 0.2s ease, transform 0.2s ease;
+    will-change: transform;
 }
 
 .exp-card:hover {
@@ -72,12 +73,13 @@
 /* Skill icons hover effect */
 .skills-icons img,
 .skills-icons i {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .skills-icons img:hover,
 .skills-icons i:hover {
-  transform: scale(1.2);
+    transform: scale(1.1);
 }
+/* Critical CSS - Above the fold */
 body {
     margin: 0 auto;
     padding: 0;
@@ -86,6 +88,7 @@ body {
     color: #000;
     line-height: 1.6;
     max-width: 1200px;
+    font-display: swap;
 }
 
 header {

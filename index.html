@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Resource Hints for Performance -->
+    <link rel="dns-prefetch" href="//github-readme-stats.vercel.app">
+    <link rel="dns-prefetch" href="//github-readme-streak-stats.herokuapp.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//images-na.ssl-images-amazon.com">
+    <link rel="dns-prefetch" href="//upload.wikimedia.org">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
     <!-- Primary Meta Tags -->
     <title>Ashwin Kuruvidi | Ashwin Chakravarthy | Software Developer & Tech Innovator</title>
     <meta name="title" content="Ashwin Kuruvidi | Ashwin Chakravarthy | Software Developer & Tech Innovator">
@@ -36,7 +44,8 @@
     <link rel="apple-touch-icon" href="https://pbs.twimg.com/profile_images/1683423932865740805/U5Ec0QBL_400x400.jpg">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <link rel="stylesheet" href="styles.css">
     
     <!-- Structured Data (JSON-LD) -->
@@ -115,19 +124,19 @@
         <section id="github-stats">
             <h2>github stats</h2>
             <!-- Replace 'yourusername' with actual GitHub username -->
-            <img src="https://github-readme-stats.vercel.app/api?username=ashchak&show_icons=true&theme=light" alt="GitHub Stats">
-            <img src="https://github-readme-streak-stats.herokuapp.com?user=ashchak&theme=light" alt="GitHub Streak">
+            <img src="https://github-readme-stats.vercel.app/api?username=ashchak&show_icons=true&theme=light" alt="GitHub Stats" loading="lazy">
+            <img src="https://github-readme-streak-stats.herokuapp.com?user=ashchak&theme=light" alt="GitHub Streak" loading="lazy">
         </section>
 
         <section id="skills">
             <h2>skills</h2>
             <div class="skills-icons">
                 <!-- .NET -->
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" alt=".NET" title=".NET" width="50" height="50">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" alt=".NET" title=".NET" width="50" height="50" loading="lazy">
                 <!-- Azure -->
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure" title="Azure" width="50" height="50">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure" title="Azure" width="50" height="50" loading="lazy">
                 <!-- Git -->
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" title="Git" width="50" height="50">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" title="Git" width="50" height="50" loading="lazy">
                 <!-- Cosmos DB (using database icon) -->
                 <i class="fas fa-database" style="font-size: 50px; color: #4b8bbe;" title="Cosmos DB"></i>
                 <!-- HTML5 -->
@@ -148,7 +157,7 @@
             <div class="experience-list">
                 <div class="exp-card">
                     <div class="exp-logo">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg" alt="Infosys Logo" class="company-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg" alt="Infosys Logo" class="company-logo" loading="lazy">
                     </div>
                     <div class="exp-details">
                         <h3 class="exp-company">Infosys</h3>
@@ -171,15 +180,15 @@
 
         <section id="favorite-music">
             <h2>top playlist</h2>
-            <iframe allow="autoplay *; encrypted-media *;" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;background:transparent;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/in/playlist/pl.u-XkD00BkCDaGDjWp"></iframe>
+            <iframe allow="autoplay *; encrypted-media *;" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;background:transparent;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/in/playlist/pl.u-XkD00BkCDaGDjWp" loading="lazy"></iframe>
         </section>
 
         <section id="speed-reading">
             <h2>speed reading</h2>
             <p>I like reading non-fiction books, blogs, and articles. Here are a few books which I really like.</p>
             <div class="books-grid">
-                <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1581527774i/41881472.jpg" alt="The Psychology of Money" title="The Psychology of Money">
-                <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388211242i/69571.jpg" alt="Rich Dad Poor Dad" title="Rich Dad Poor Dad">
+                <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1581527774i/41881472.jpg" alt="The Psychology of Money" title="The Psychology of Money" loading="lazy">
+                <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388211242i/69571.jpg" alt="Rich Dad Poor Dad" title="Rich Dad Poor Dad" loading="lazy">
                 
                 <!-- Add more -->
             </div>
