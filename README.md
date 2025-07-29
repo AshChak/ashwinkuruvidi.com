@@ -92,6 +92,15 @@ ashwinkuruvidi.com/
 - **Performance**: Optimized loading with resource hints
 - **Mobile-First**: Responsive design for all devices
 
+## 🔒 Security Features
+
+- **Content Security Policy (CSP)**: Prevents XSS and code injection attacks
+- **Security Headers**: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection
+- **Referrer Policy**: Controls referrer information sent to external sites
+- **External Link Security**: `rel="noopener noreferrer"` on all external links
+- **HTTPS Only**: Secure connections via GitHub Pages SSL
+- **Static Site Security**: No server-side vulnerabilities or database exposure
+
 ## 🔧 Customization
 
 To customize this website for your own use:
