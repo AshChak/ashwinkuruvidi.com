@@ -135,15 +135,6 @@ h2 {
     margin-bottom: 24px;
 }
 
-/* GitHub Stats Section */
-#github-stats {
-    margin: 40px 0;
-}
-
-#github-stats img {
-    margin-top: 8px;
-}
-
 .social-icons {
     display: flex;
     gap: 20px;
