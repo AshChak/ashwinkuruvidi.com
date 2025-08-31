@@ -215,53 +215,26 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAFToAnt-622nOyqZdTkjcA4KB-UO9x17U",
-            authDomain: "ashwinkuruvidi.firebaseapp.com",
-            databaseURL: "https://ashwinkuruvidi-default-rtdb.firebaseio.com",
-            projectId: "ashwinkuruvidi",
-            storageBucket: "ashwinkuruvidi.firebasestorage.app",
-            messagingSenderId: "723759229026",
-            appId: "1:723759229026:web:83502cc5b09e024911493b"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // Blog Reactions Functionality with Firebase
-        document.addEventListener('DOMContentLoaded', function() {
+        // Fallback reactions functionality (works without Firebase)
+        function initFallbackReactions() {
+            console.log('Initializing fallback reactions...');
             const reactionBtns = document.querySelectorAll('.reaction-btn');
-            const blogId = 'ai-workflow';
-            const reactionsRef = database.ref(`reactions/${blogId}`);
-            const userStorageKey = 'blog-reactions-user-ai-workflow';
+            const userStorageKey = 'blog-reactions-user-ai-workflow-fallback';
+            const globalStorageKey = 'blog-reactions-global-ai-workflow-fallback';
             
             let userReactions = JSON.parse(localStorage.getItem(userStorageKey)) || {};
+            let globalReactions = JSON.parse(localStorage.getItem(globalStorageKey)) || {
+                love: 0, useful: 0, insightful: 0, 'mind-blown': 0, fire: 0
+            };
             
-            console.log('Reaction buttons found:', reactionBtns.length); // Debug log
+            console.log('Fallback: Found', reactionBtns.length, 'reaction buttons');
             
-            // Listen for real-time updates to reaction counts
-            reactionsRef.on('value', (snapshot) => {
-                const reactions = snapshot.val() || {
-                    love: 0,
-                    useful: 0,
-                    insightful: 0,
-                    'mind-blown': 0,
-                    fire: 0
-                };
-                
-                console.log('Firebase data received:', reactions); // Debug log
-                updateReactionDisplay(reactions);
-            });
-            
-            // Update the UI with current reaction counts
-            function updateReactionDisplay(reactions) {
+            function updateDisplay() {
                 reactionBtns.forEach(btn => {
                     const reaction = btn.dataset.reaction;
                     const countSpan = btn.querySelector('.count');
                     if (countSpan) {
-                        countSpan.textContent = reactions[reaction] || 0;
+                        countSpan.textContent = globalReactions[reaction] || 0;
                     }
                     
                     if (userReactions[reaction]) {
@@ -272,37 +245,28 @@
                 });
             }
             
-            // Handle reaction clicks
             reactionBtns.forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    console.log('Reaction clicked:', btn.dataset.reaction); // Debug log
+                    console.log('Fallback: Reaction clicked:', btn.dataset.reaction);
                     
                     const reaction = this.dataset.reaction;
-                    const reactionRef = database.ref(`reactions/${blogId}/${reaction}`);
                     
                     if (userReactions[reaction]) {
-                        // Remove reaction
-                        reactionRef.transaction((currentValue) => {
-                            return Math.max(0, (currentValue || 0) - 1);
-                        });
+                        globalReactions[reaction] = Math.max(0, (globalReactions[reaction] || 0) - 1);
                         delete userReactions[reaction];
                         this.classList.remove('reacted');
-                        console.log('Reaction removed:', reaction); // Debug log
                     } else {
-                        // Add reaction
-                        reactionRef.transaction((currentValue) => {
-                            return (currentValue || 0) + 1;
-                        });
+                        globalReactions[reaction] = (globalReactions[reaction] || 0) + 1;
                         userReactions[reaction] = true;
                         this.classList.add('reacted');
-                        console.log('Reaction added:', reaction); // Debug log
                     }
                     
-                    // Save user's personal reactions to localStorage
                     localStorage.setItem(userStorageKey, JSON.stringify(userReactions));
+                    localStorage.setItem(globalStorageKey, JSON.stringify(globalReactions));
+                    updateDisplay();
                     
-                    // Add animation
+                    // Animation
                     const emoji = this.querySelector('.emoji');
                     if (emoji) {
                         emoji.style.transform = 'scale(1.4)';
@@ -312,6 +276,113 @@
                     }
                 });
             });
+            
+            updateDisplay();
+        }
+
+        // Try Firebase first, fallback to localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking Firebase...');
+            
+            // Check if Firebase is available
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not loaded, using fallback reactions');
+                initFallbackReactions();
+                return;
+            }
+            
+            try {
+                // Firebase configuration
+                const firebaseConfig = {
+                    apiKey: "AIzaSyAFToAnt-622nOyqZdTkjcA4KB-UO9x17U",
+                    authDomain: "ashwinkuruvidi.firebaseapp.com",
+                    databaseURL: "https://ashwinkuruvidi-default-rtdb.firebaseio.com",
+                    projectId: "ashwinkuruvidi",
+                    storageBucket: "ashwinkuruvidi.firebasestorage.app",
+                    messagingSenderId: "723759229026",
+                    appId: "1:723759229026:web:83502cc5b09e024911493b"
+                };
+
+                console.log('Initializing Firebase...');
+                firebase.initializeApp(firebaseConfig);
+                const database = firebase.database();
+
+                const reactionBtns = document.querySelectorAll('.reaction-btn');
+                const blogId = 'ai-workflow';
+                const reactionsRef = database.ref(`reactions/${blogId}`);
+                const userStorageKey = 'blog-reactions-user-ai-workflow';
+                
+                let userReactions = JSON.parse(localStorage.getItem(userStorageKey)) || {};
+                
+                console.log('Firebase: Found', reactionBtns.length, 'reaction buttons');
+                
+                // Listen for real-time updates
+                reactionsRef.on('value', (snapshot) => {
+                    const reactions = snapshot.val() || {
+                        love: 0, useful: 0, insightful: 0, 'mind-blown': 0, fire: 0
+                    };
+                    console.log('Firebase: Data received:', reactions);
+                    updateReactionDisplay(reactions);
+                });
+                
+                function updateReactionDisplay(reactions) {
+                    reactionBtns.forEach(btn => {
+                        const reaction = btn.dataset.reaction;
+                        const countSpan = btn.querySelector('.count');
+                        if (countSpan) {
+                            countSpan.textContent = reactions[reaction] || 0;
+                        }
+                        
+                        if (userReactions[reaction]) {
+                            btn.classList.add('reacted');
+                        } else {
+                            btn.classList.remove('reacted');
+                        }
+                    });
+                }
+                
+                reactionBtns.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('Firebase: Reaction clicked:', btn.dataset.reaction);
+                        
+                        const reaction = this.dataset.reaction;
+                        const reactionRef = database.ref(`reactions/${blogId}/${reaction}`);
+                        
+                        if (userReactions[reaction]) {
+                            reactionRef.transaction((currentValue) => {
+                                return Math.max(0, (currentValue || 0) - 1);
+                            });
+                            delete userReactions[reaction];
+                            this.classList.remove('reacted');
+                        } else {
+                            reactionRef.transaction((currentValue) => {
+                                return (currentValue || 0) + 1;
+                            });
+                            userReactions[reaction] = true;
+                            this.classList.add('reacted');
+                        }
+                        
+                        localStorage.setItem(userStorageKey, JSON.stringify(userReactions));
+                        
+                        // Animation
+                        const emoji = this.querySelector('.emoji');
+                        if (emoji) {
+                            emoji.style.transform = 'scale(1.4)';
+                            setTimeout(() => {
+                                emoji.style.transform = '';
+                            }, 200);
+                        }
+                    });
+                });
+                
+                console.log('Firebase reactions initialized successfully');
+                
+            } catch (error) {
+                console.error('Firebase initialization failed:', error);
+                console.log('Falling back to localStorage reactions');
+                initFallbackReactions();
+            }
         });
     </script>
 </body>
