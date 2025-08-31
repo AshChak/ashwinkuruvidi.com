@@ -210,11 +210,10 @@
     </footer>
 
     <!-- Firebase SDK -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-        import { getDatabase, ref, onValue, runTransaction } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
-
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    
+    <script>
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAFToAnt-622nOyqZdTkjcA4KB-UO9x17U",
@@ -227,20 +226,22 @@
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
         // Blog Reactions Functionality with Firebase
         document.addEventListener('DOMContentLoaded', function() {
             const reactionBtns = document.querySelectorAll('.reaction-btn');
-            const blogId = 'ai-workflow'; // Unique identifier for this blog post
-            const reactionsRef = ref(database, `reactions/${blogId}`);
+            const blogId = 'ai-workflow';
+            const reactionsRef = database.ref(`reactions/${blogId}`);
             const userStorageKey = 'blog-reactions-user-ai-workflow';
             
             let userReactions = JSON.parse(localStorage.getItem(userStorageKey)) || {};
             
+            console.log('Reaction buttons found:', reactionBtns.length); // Debug log
+            
             // Listen for real-time updates to reaction counts
-            onValue(reactionsRef, (snapshot) => {
+            reactionsRef.on('value', (snapshot) => {
                 const reactions = snapshot.val() || {
                     love: 0,
                     useful: 0,
@@ -249,6 +250,7 @@
                     fire: 0
                 };
                 
+                console.log('Firebase data received:', reactions); // Debug log
                 updateReactionDisplay(reactions);
             });
             
@@ -257,7 +259,9 @@
                 reactionBtns.forEach(btn => {
                     const reaction = btn.dataset.reaction;
                     const countSpan = btn.querySelector('.count');
-                    countSpan.textContent = reactions[reaction] || 0;
+                    if (countSpan) {
+                        countSpan.textContent = reactions[reaction] || 0;
+                    }
                     
                     if (userReactions[reaction]) {
                         btn.classList.add('reacted');
@@ -269,35 +273,42 @@
             
             // Handle reaction clicks
             reactionBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Reaction clicked:', btn.dataset.reaction); // Debug log
+                    
                     const reaction = this.dataset.reaction;
-                    const reactionRef = ref(database, `reactions/${blogId}/${reaction}`);
+                    const reactionRef = database.ref(`reactions/${blogId}/${reaction}`);
                     
                     if (userReactions[reaction]) {
                         // Remove reaction
-                        runTransaction(reactionRef, (currentValue) => {
+                        reactionRef.transaction((currentValue) => {
                             return Math.max(0, (currentValue || 0) - 1);
                         });
                         delete userReactions[reaction];
                         this.classList.remove('reacted');
+                        console.log('Reaction removed:', reaction); // Debug log
                     } else {
                         // Add reaction
-                        runTransaction(reactionRef, (currentValue) => {
+                        reactionRef.transaction((currentValue) => {
                             return (currentValue || 0) + 1;
                         });
                         userReactions[reaction] = true;
                         this.classList.add('reacted');
+                        console.log('Reaction added:', reaction); // Debug log
                     }
                     
                     // Save user's personal reactions to localStorage
                     localStorage.setItem(userStorageKey, JSON.stringify(userReactions));
                     
-                    // Add a little animation
+                    // Add animation
                     const emoji = this.querySelector('.emoji');
-                    emoji.style.transform = 'scale(1.4)';
-                    setTimeout(() => {
-                        emoji.style.transform = '';
-                    }, 200);
+                    if (emoji) {
+                        emoji.style.transform = 'scale(1.4)';
+                        setTimeout(() => {
+                            emoji.style.transform = '';
+                        }, 200);
+                    }
                 });
             });
         });
