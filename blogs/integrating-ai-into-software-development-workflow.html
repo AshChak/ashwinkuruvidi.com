@@ -142,7 +142,7 @@
                         I'm looking forward to seeing how AI continues to evolve and integrate into my workflow. I'd like to see it take on more complex tasks, feature additions on huge code bases and just adding a url to a well refined JIRA ticket should be enough for it to perform the task. And developer would just have to review and refine.
                     </p>
                     <p>
-                        Going a step further, it should make sure the code meets all security checks like SonarQube, CheckMarx.
+                        Going a step further, it should make sure the code meets all security checks like SonarQube, VeraCode, CheckMarx.
                     </p>
 
                     <div class="blog-conclusion">
@@ -209,25 +209,51 @@
         <p>© 2025 ashwinkuruvidi.com</p>
     </footer>
 
-    <script>
-        // Blog Reactions Functionality
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getDatabase, ref, onValue, runTransaction } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAFToAnt-622nOyqZdTkjcA4KB-UO9x17U",
+            authDomain: "ashwinkuruvidi.firebaseapp.com",
+            databaseURL: "https://ashwinkuruvidi-default-rtdb.firebaseio.com",
+            projectId: "ashwinkuruvidi",
+            storageBucket: "ashwinkuruvidi.firebasestorage.app",
+            messagingSenderId: "723759229026",
+            appId: "1:723759229026:web:83502cc5b09e024911493b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Blog Reactions Functionality with Firebase
         document.addEventListener('DOMContentLoaded', function() {
             const reactionBtns = document.querySelectorAll('.reaction-btn');
-            const storageKey = 'blog-reactions-ai-workflow';
+            const blogId = 'ai-workflow'; // Unique identifier for this blog post
+            const reactionsRef = ref(database, `reactions/${blogId}`);
+            const userStorageKey = 'blog-reactions-user-ai-workflow';
             
-            // Load saved reactions from localStorage
-            let reactions = JSON.parse(localStorage.getItem(storageKey)) || {
-                love: 0,
-                useful: 0,
-                insightful: 0,
-                'mind-blown': 0,
-                fire: 0
-            };
+            let userReactions = JSON.parse(localStorage.getItem(userStorageKey)) || {};
             
-            let userReactions = JSON.parse(localStorage.getItem(storageKey + '-user')) || {};
+            // Listen for real-time updates to reaction counts
+            onValue(reactionsRef, (snapshot) => {
+                const reactions = snapshot.val() || {
+                    love: 0,
+                    useful: 0,
+                    insightful: 0,
+                    'mind-blown': 0,
+                    fire: 0
+                };
+                
+                updateReactionDisplay(reactions);
+            });
             
-            // Initialize reaction counts and user states
-            function updateReactionDisplay() {
+            // Update the UI with current reaction counts
+            function updateReactionDisplay(reactions) {
                 reactionBtns.forEach(btn => {
                     const reaction = btn.dataset.reaction;
                     const countSpan = btn.querySelector('.count');
@@ -245,24 +271,26 @@
             reactionBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const reaction = this.dataset.reaction;
+                    const reactionRef = ref(database, `reactions/${blogId}/${reaction}`);
                     
                     if (userReactions[reaction]) {
                         // Remove reaction
-                        reactions[reaction] = Math.max(0, (reactions[reaction] || 0) - 1);
+                        runTransaction(reactionRef, (currentValue) => {
+                            return Math.max(0, (currentValue || 0) - 1);
+                        });
                         delete userReactions[reaction];
                         this.classList.remove('reacted');
                     } else {
                         // Add reaction
-                        reactions[reaction] = (reactions[reaction] || 0) + 1;
+                        runTransaction(reactionRef, (currentValue) => {
+                            return (currentValue || 0) + 1;
+                        });
                         userReactions[reaction] = true;
                         this.classList.add('reacted');
                     }
                     
-                    // Save to localStorage
-                    localStorage.setItem(storageKey, JSON.stringify(reactions));
-                    localStorage.setItem(storageKey + '-user', JSON.stringify(userReactions));
-                    
-                    updateReactionDisplay();
+                    // Save user's personal reactions to localStorage
+                    localStorage.setItem(userStorageKey, JSON.stringify(userReactions));
                     
                     // Add a little animation
                     const emoji = this.querySelector('.emoji');
@@ -272,9 +300,6 @@
                     }, 200);
                 });
             });
-            
-            // Initialize display
-            updateReactionDisplay();
         });
     </script>
 </body>
